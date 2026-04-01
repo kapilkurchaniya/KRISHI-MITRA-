@@ -1,0 +1,7 @@
+// const router = express.Router(); // allow us to create routes expect from app.js
+// npm i jsonwebtoken - to create token
+// const jwt = require("jsonwebtoken"); - importing jwt by npm i jsonwebtoken
+// npm i bcrypt - to hash the password
+// require("dotenv").config(); - for using mongo uri in database
+//npm i cookie-parser 
+// const cookieParser = require("cookie-parser") - for using cookie in the application written in app.js

@@ -1,0 +1,3 @@
+// npm i multer - for file upload because we are uploading images in post creation and we will upload through form data and multer will help us to handle form data and file upload
+// npm i cloudinary - for cloud storage of images
+npm i @imagekit/nodejs
