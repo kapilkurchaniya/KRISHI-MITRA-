@@ -1,29 +1,30 @@
+const mongoose = require('mongoose');
 const userModel = require('../models/usermodel');
 const jwt = require('jsonwebtoken');
-const blacklistModel = require('../models/blacklist.model');
+const redisClient = require('../config/cache');
 
 async function authuser(req, res, next) {
     const token = req.cookies.token;
     if (!token) {
         return res.status(401).json({ message: 'Token not found' });
     }
-    const blacklistedToken = await blacklistModel.findOne({ token });
+    const blacklistedToken = await redisClient.get(token);
     if (blacklistedToken) {
         return res.status(401).json({ message: 'Invalid token' });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await userModel.findById(decoded.id);
+        const user = await userModel.findById(new mongoose.Types.ObjectId(decoded.id)).select('-password');
         if (!user) {
-            return res.status(401).json({ message: 'Unauthorized user' });
+            return res.status(401).json({ message: 'User not found' });
         }
         req.user = user;
         next();
     } 
     catch (error) {
-        res.status(401).json({ message: 'Unauthorized credential' });
+        res.status(401).json({ message: 'Unauthorized' });
     }   
 }
 
-module.exports = {authuser} ;
+module.exports = { authuser };

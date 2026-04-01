@@ -30,11 +30,11 @@ export const detectMood = (landmarks) => {
   const m = getFaceMetrics(landmarks);
 
   if (m.mouthWidth > 0.08 && m.mouthHeight > 0.025) {
-    return "Happy 😄";
+    return "happy";
   }
 
   if (m.mouthHeight > 0.05) {
-    return "Surprised 😲";
+    return "surprised";
   }
 
   if (
@@ -42,10 +42,10 @@ export const detectMood = (landmarks) => {
     m.rightMouthCorner > m.mouthCenter &&
     (m.eyebrowLeft > 0.004 || m.eyebrowRight > 0.004)
   ) {
-    return "Sad 😢";
+    return "sad";
   }
 
-  return "Neutral 😐";
+  return "neutral";
 };
 
 

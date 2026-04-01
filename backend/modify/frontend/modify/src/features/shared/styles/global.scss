@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  overflow-x: hidden;
+  position: relative;
+
+  // 🔥 Premium dark gradient (same vibe as login)
+  background: linear-gradient(
+    135deg,
+    #020617,
+    #0f172a,
+    #1e293b,
+    #020617
+  );
+
+  background-size: 300% 300%;
+  animation: gradientMove 10s ease infinite;
+}
+
+/* 🔥 Soft glow overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(139, 92, 246, 0.2),
+    transparent 60%
+  );
+
+  filter: blur(80px);
+}
+
+/* ✨ Smooth gradient animation */
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

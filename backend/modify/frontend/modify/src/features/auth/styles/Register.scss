@@ -1,0 +1,109 @@
+.register-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+
+  // 🌌 Gradient background
+  background: linear-gradient(135deg, #020617, #0f172a, #1e293b);
+
+  .form-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+
+    // 🧊 Glass effect
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    border-radius: 20px;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.5),
+      inset 0 0 20px rgba(255, 255, 255, 0.05);
+
+    transition: 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.6),
+        inset 0 0 25px rgba(255, 255, 255, 0.08);
+    }
+
+    h2 {
+      margin-bottom: 1.8rem;
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+     
+
+      label {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: #cbd5f5;
+        font-size: 0.9rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.7rem 0.9rem;
+
+        border-radius: 10px;
+        border: 1px solid rgba(26, 23, 23, 0.475);
+
+        background: rgba(255, 255, 255, 0.05);
+        color: #fff;
+
+        transition: 0.25s;
+
+        &::placeholder {
+          color: #94a3b8;
+        }
+
+        &:focus {
+          border-color: #8b5cf6;
+          box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+          outline: none;
+        }
+      }
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 0.85rem;
+      margin-top: 10px;
+       margin-bottom: 25px;
+
+      border: none;
+      border-radius: 12px;
+
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      color: #fff;
+
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: scale(1.03);
+        background: linear-gradient(135deg, #7c3aed, #4f46e5);
+        box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
+      }
+
+      &:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+}

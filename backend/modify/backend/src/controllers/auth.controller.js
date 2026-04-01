@@ -1,7 +1,7 @@
 const userModel = require('../models/usermodel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const blacklistModel = require('../models/blacklist.model');
+const redisClient = require('../config/cache');
 
 
 async function register(req, res) {
@@ -72,21 +72,25 @@ async function login(req, res) {
     }
 }
 async function getMe(req, res) {
-const user = await userModel.findById(req.user._id);
-if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-}
-res.status(200).json({
-    message: 'User details retrieved successfully',
-    id: user._id,
-    username: user.username,
-    email: user.email
-});
+  const user = await userModel.findById(req.user._id).select('-password');
+  if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+  }
+  res.status(200).json({
+      message: 'User details retrieved successfully',
+      user: {
+          id: user._id,
+          username: user.username,
+          email: user.email
+      }
+  });
 }
 async function logout(req, res) {
     const token = req.cookies.token;
+    if (token) {
+        await redisClient.set(token, Date.now().toString());
+    }
     res.clearCookie('token');
-    await blacklistModel.create({ token });
     res.status(200).json({ message: 'Logout successful' });
 }
 
