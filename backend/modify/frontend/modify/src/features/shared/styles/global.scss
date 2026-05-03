@@ -1,55 +1,111 @@
+/* Global Styles */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-html, body, #root {
-  width: 100%;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
   min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #fff;
-  overflow-x: hidden;
-  position: relative;
-
-  // 🔥 Premium dark gradient (same vibe as login)
-  background: linear-gradient(
-    135deg,
-    #020617,
-    #0f172a,
-    #1e293b,
-    #020617
-  );
-
-  background-size: 300% 300%;
-  animation: gradientMove 10s ease infinite;
+  color: white;
 }
 
-/* 🔥 Soft glow overlay */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
+/* Global Button Styles */
+.btn-camera {
+  padding: 16px 32px;
+  font-size: 1.2em;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  min-width: 220px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
-  background: radial-gradient(
-    circle at center,
-    rgba(139, 92, 246, 0.2),
-    transparent 60%
-  );
+  &.active {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    box-shadow: 0 12px 40px rgba(239,68,68,0.4);
+    transform: scale(1.02);
+  }
 
-  filter: blur(80px);
+  &:not(.active) {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    box-shadow: 0 8px 32px rgba(34,197,94,0.3);
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+  }
 }
 
-/* ✨ Smooth gradient animation */
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
+.mood-label {
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 1.4em;
+  font-weight: 800;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  transition: all 0.4s ease;
+  
+  &.happy { 
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    animation: happyPulse 2s infinite;
   }
-  50% {
-    background-position: 100% 50%;
+  &.sad { 
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
   }
-  100% {
-    background-position: 0% 50%;
+  &.angry {
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    animation: angryShake 0.5s infinite;
   }
+  &.fear {
+    background: linear-gradient(135deg, #f97316, #fb923c);
+  }
+  &.surprise {
+    background: linear-gradient(135deg, #ec4899, #f472b6);
+    animation: surprisedBounce 1.5s infinite;
+  }
+  &.neutral { 
+    background: linear-gradient(135deg, #6b7280, #9ca3af);
+  }
+}
+
+@keyframes happyPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes surprisedBounce {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.1) rotate(2deg); }
+  75% { transform: scale(0.95) rotate(-1deg); }
+}
+
+@keyframes angryShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .btn-camera {
+    min-width: 280px;
+    padding: 18px 36px;
+    font-size: 1.3em;
+  }
+}
+
+/* Utility */
+.hidden {
+  display: none;
 }

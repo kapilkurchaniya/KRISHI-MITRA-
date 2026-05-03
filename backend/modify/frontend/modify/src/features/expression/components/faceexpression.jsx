@@ -1,173 +1,172 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Camera } from "@mediapipe/camera_utils";
-
-import {
-  detectMood,
-  drawLandmarks
-} from "../utils/utils";
+import { detectMood, drawLandmarks } from "../utils/utils";
+import './FaceExpression.scss';
+import '../shared/styles/global.scss';
 
 const FaceExpression = ({ onDetect }) => {
-
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
-  const cameraRef = useRef(null);
   const faceMeshRef = useRef(null);
+  const cameraRef = useRef(null);
+  const [mood, setMood] = useState("neutral");
+  const [cameraActive, setCameraActive] = useState(false);
+  const [noFace, setNoFace] = useState(false);
 
-  const [mood, setMood] = useState("Click detect");
-  const [cameraOn, setCameraOn] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [lastDetectedMood, setLastDetectedMood] = useState(null);
+  const handleCameraToggle = useCallback(() => {
+    const active = !cameraActive;
+    setCameraActive(active);
+    setMood("neutral");
+    setNoFace(false);
+  }, [cameraActive]);
+
+  const onResults = useCallback((results) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Clear canvas
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Mirror draw video
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.translate(-canvas.width, 0);
+    ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+
+    if (results.multiFaceLandmarks && results.multiFaceLandmarks[0]) {
+      const landmarks = results.multiFaceLandmarks[0];
+      const detectedMood = detectMood(landmarks);
+      setMood(detectedMood);
+      setNoFace(false);
+      
+      if (onDetect) {
+        onDetect(detectedMood);
+      }
+      
+      // Draw landmarks
+      drawLandmarks(ctx, landmarks, detectedMood);
+    } else {
+      setNoFace(true);
+      setMood('neutral');
+    }
+
+    ctx.restore();
+  }, [onDetect]);
 
   useEffect(() => {
-    if (!window.FaceMesh) return;
+    if (!cameraActive) {
+      // Cleanup
+      if (cameraRef.current) {
+        cameraRef.current.stop();
+        cameraRef.current = null;
+      }
+      if (faceMeshRef.current) {
+        faceMeshRef.current.close();
+        faceMeshRef.current = null;
+      }
+      return;
+    }
 
-    const handleResults = (results) => {
-      setLoading(false);
-
-      const ctx = canvasRef.current.getContext("2d");
-
-      // ✅ Clear canvas
-      ctx.clearRect(0, 0, 640, 480);
-
-      // ✅ FIX: Flip canvas (remove mirror effect)
-      ctx.save();
-      ctx.scale(-1, 1);
-      ctx.drawImage(results.image, -640, 0, 640, 480);
-
-      if (!results.multiFaceLandmarks) {
-        ctx.restore();
-        setMood("No face detected");
+    // Wait for FaceMesh to load
+    const loadFaceMesh = async () => {
+      if (!window.FaceMesh) {
+        setTimeout(loadFaceMesh, 100);
         return;
       }
 
-      const landmarks = results.multiFaceLandmarks[0];
-
-      const detectedMood = detectMood(landmarks);
-      setMood(detectedMood);
-
-      // Send mood to parent only if it changed
-      if (onDetect && detectedMood !== lastDetectedMood) {
-        setLastDetectedMood(detectedMood);
-        onDetect(detectedMood);
-      }
-
-      // Draw landmarks (still flipped correctly)
-      drawLandmarks(ctx, landmarks);
-
-      ctx.restore();
-    };
-
-    const faceMesh = new window.FaceMesh({
-      locateFile: (file) =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
-    });
-
-    faceMesh.setOptions({
-      maxNumFaces: 1,
-      refineLandmarks: true,
-      selfieMode: true, // keep true for better tracking
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5,
-    });
-
-    faceMesh.onResults(handleResults);
-    faceMeshRef.current = faceMesh;
-
-    if (cameraOn) {
-      cameraRef.current = new Camera(videoRef.current, {
-        onFrame: async () => {
-          const ctx = canvasRef.current.getContext("2d");
-
-          // ✅ Live camera preview (fixed mirror)
-          ctx.save();
-          ctx.scale(-1, 1);
-          ctx.drawImage(videoRef.current, -640, 0, 640, 480);
-          ctx.restore();
-        },
-        width: 640,
-        height: 480,
+      // Initialize once
+      const faceMesh = new window.FaceMesh({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
       });
 
-      cameraRef.current.start();
-    } else {
+      faceMesh.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        selfieMode: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+
+      faceMesh.onResults(onResults);
+      faceMeshRef.current = faceMesh;
+      
+      // Start camera after init
+      startCamera();
+    };
+
+    const startCamera = () => {
+      navigator.mediaDevices.getUserMedia({ 
+        video: { width: 640, height: 480, facingMode: 'user' } 
+      }).then(stream => {
+        videoRef.current.srcObject = stream;
+        videoRef.current.onloadedmetadata = () => {
+          const canvas = canvasRef.current;
+          canvas.width = videoRef.current.videoWidth;
+          canvas.height = videoRef.current.videoHeight;
+          
+          // Camera with continuous frame sending
+          const camera = new Camera(videoRef.current, {
+            onFrame: () => {
+              if (faceMeshRef.current && videoRef.current.readyState === 4) {
+                faceMeshRef.current.send({ image: videoRef.current });
+              }
+            }
+          });
+          camera.start();
+          cameraRef.current = camera;
+        };
+      }).catch(err => {
+        console.error('Camera error:', err);
+        setCameraActive(false);
+      });
+    };
+
+    loadFaceMesh();
+
+    return () => {
       if (cameraRef.current) {
         cameraRef.current.stop();
       }
-    }
-
-    return () => {
-      if (cameraRef.current) cameraRef.current.stop();
+      if (faceMeshRef.current) {
+        faceMeshRef.current.close();
+      }
     };
-
-  }, [cameraOn, onDetect]);
-
-  // ✅ Detect button
-  const handleDetect = async () => {
-    if (!faceMeshRef.current || !videoRef.current) return;
-
-    setLoading(true);
-    setMood("Detecting...");
-
-    await faceMeshRef.current.send({
-      image: videoRef.current
-    });
-
-    // Note: onDetect will be called in handleResults
-  };
-  
+  }, [cameraActive, onResults]);
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div className="face-detector">
+      <div className="detector-header">
+        <div className="fox-mood-display">
+          🦊 
+          <span className={`mood-display ${mood}`}>
+            {noFace ? 'No face detected' : mood.toUpperCase()}
+          </span>
+        </div>
+      </div>
 
-      <h2>AI Face Expression Detector</h2>
+      <div className="camera-container">
+        <video ref={videoRef} playsInline className="hidden" />
+        <canvas ref={canvasRef} className="camera-canvas" />
+        {noFace && <div className="no-face">👀 Looking for face...</div>}
+      </div>
 
-      <video ref={videoRef} playsInline style={{ display: "none" }} />
-
-      <canvas
-        ref={canvasRef}
-        width={640}
-        height={480}
-        style={{
-          border: "2px solid black",
-          borderRadius: "10px"
-        }}
-      />
-
-      <h1>{mood}</h1>
-
-      {/* Camera Button */}
-      <button
-        onClick={() => setCameraOn(!cameraOn)}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          marginTop: "10px",
-          cursor: "pointer"
-        }}
-      >
-        {cameraOn ? "Stop Camera" : "Start Camera"}
-      </button>
-
-      <br />
-      
-
-      {/* Detect Button */}
-      <button
-        onClick={handleDetect}
-        disabled={!cameraOn || loading}
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          marginTop: "10px",
-          cursor: !cameraOn ? "not-allowed" : "pointer",
-          opacity: !cameraOn ? 0.5 : 1
-        }}
-      >
-        {loading ? "Detecting..." : "Detect Mood"}
-      </button>
-
+      <div className="control-buttons">
+        <button 
+          className={`btn-camera ${cameraActive ? 'active' : ''}`}
+          onClick={handleCameraToggle}
+        >
+          {cameraActive ? '🛑 Stop Camera' : '🎭 Start Detection'}
+        </button>
+      </div>
     </div>
   );
 };
 
 export default FaceExpression;
+

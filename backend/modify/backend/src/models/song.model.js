@@ -17,12 +17,10 @@ const songSchema = new mongoose.Schema({
         type: String,
         enum:{
             values:[
-                "happy",
-                "sad",
-                "surprised",
-                 "neutral"
+                "happy", "sad", "angry", "fear", "surprise", 
+                "disgust", "contempt", "neutral"
             ],
-            message: "Invalid mood"
+            message: "Invalid mood - must be one of: happy,sad,angry,fear,surprise,disgust,contempt,neutral"
         }
     }
 })

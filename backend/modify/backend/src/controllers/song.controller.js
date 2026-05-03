@@ -36,12 +36,13 @@ async function uploadSong(req, res) {
 async function getSongs(req, res) {
   const { mood } = req.query;
   
-  const songs = await Songmodel.findOne({ mood });
+  const songs = await Songmodel.find({ mood });
 
-  res.status(200).json({message: 'Songs retrieved successfully', songs });
+  res.status(200).json({ songs });
 }
 
 module.exports = {
   uploadSong,
   getSongs
 };
+
