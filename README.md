@@ -20,6 +20,14 @@ Designed with a **mobile-first responsive UI**, the platform works seamlessly ac
 
 ---
 
+# 📸 Live Presentation
+
+## 🎥 Project Demo
+
+https://github.com/user-attachments/assets/4cf38461-ebbc-4704-8548-ccfeb445b39f
+
+---
+
 # ✨ Features
 
 ## 🤖 AI Farming Assistant
@@ -98,13 +106,6 @@ Designed with a **mobile-first responsive UI**, the platform works seamlessly ac
 
 ---
 
-# 📸 Live Presentation
-
-## 🎥 Project Demo
-
-https://github.com/user-attachments/assets/4cf38461-ebbc-4704-8548-ccfeb445b39f
-
----
 
 # 🏗 Project Architecture
 
