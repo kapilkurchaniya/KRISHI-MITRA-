@@ -1,10 +1,12 @@
 import { redirect } from "next/navigation"
 import { auth } from "@/auth"
+import { prisma } from "@/lib/db"
 import { BottomNav } from "@/components/ui/bottom-nav"
 import { MitraFab } from "@/components/ui/mitra-fab"
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/ui/app-sidebar" // We will create this
-import { createClient } from "@/lib/supabase/server"
+import { AppSidebar } from "@/components/ui/app-sidebar"
+import { ThemeToggle } from "@/components/ui/theme-toggle"
+import { LanguageToggle } from "@/components/ui/language-toggle"
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
@@ -16,20 +18,24 @@ export default async function DashboardLayout({ children }: { children: React.Re
     return null
   }
 
+  let shouldRedirect = false;
+
   try {
-    const supabase = await createClient()
-    
-    // Fetch profile from Supabase using Clerk user ID
-    // Often Clerk IDs start with 'user_', so we check our profiles table
-    const { data: profile } = await supabase.from("profiles").select("onboarded").eq("id", user.id).maybeSingle()
-    
-    // Force onboarding if profile doesn't exist or is incomplete
+    const profile = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { onboarded: true },
+    })
+
     if (!profile || profile.onboarded === false) {
-      redirect("/profile-setup")
+      shouldRedirect = true;
     }
   } catch (error) {
     console.error('[v0] Dashboard layout error:', error)
-    // If Supabase fails, we might still let them in or redirect
+    // If DB lookup fails, let them in
+  }
+
+  if (shouldRedirect) {
+    redirect("/profile-setup")
   }
 
   return (
@@ -37,9 +43,15 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <AppSidebar />
       <SidebarInset>
         <div className="min-h-dvh bg-background flex flex-col relative w-full">
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 md:px-6 md:flex hidden">
-            <SidebarTrigger className="-ml-1" />
-            <div className="mr-4 font-semibold text-lg">AI Krishi</div>
+          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 md:px-6 md:flex hidden justify-between">
+            <div className="flex items-center gap-2">
+              <SidebarTrigger className="-ml-1" />
+              <div className="font-semibold text-lg">AI Krishi</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <LanguageToggle />
+            </div>
           </header>
           
           <main className="flex-1 overflow-auto">

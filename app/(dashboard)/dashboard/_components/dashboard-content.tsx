@@ -22,7 +22,7 @@ export function DashboardContent({ profile, children }: DashboardContentProps) {
   const { language } = useLanguage()
   const t = (key: string) => translate(key, language as "en" | "hi")
 
-  const firstName = profile?.full_name?.split(" ")[0] || "there"
+  const firstName = profile?.full_name?.split(" ")[0] || (language === "hi" ? "किसान" : "Farmer")
   const placeLabel = [profile?.village, profile?.district].filter(Boolean).join(", ") || "your village"
 
   const quickActions = [
@@ -43,12 +43,12 @@ export function DashboardContent({ profile, children }: DashboardContentProps) {
         </p>
       </section>
 
-      <section aria-label="Quick actions" className="grid grid-cols-4 gap-3">
+      <section aria-label="Quick actions" className="grid grid-cols-4 sm:flex gap-3">
         {quickActions.map(({ href, label, icon: Icon, tone }) => (
           <Link
             key={href}
             href={href}
-            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md transition-shadow"
+            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md transition-shadow sm:w-28 lg:w-32"
           >
             <span className={`size-10 rounded-xl ${tone} flex items-center justify-center`}>
               <Icon className="size-5" aria-hidden="true" />
