@@ -15,8 +15,13 @@ export async function GET(request: Request) {
   } else {
     // Aggregate top prices from major crops
     const topCrops = ["wheat", "rice", "maize", "cotton", "soybean", "onion", "potato", "tomato"]
-    for (const c of topCrops) {
-      const p = await getMandiPrices(c, state)
+    
+    // Fetch in parallel to speed up API response
+    const results = await Promise.all(
+      topCrops.map(c => getMandiPrices(c, state))
+    )
+    
+    for (const p of results) {
       prices.push(...p.slice(0, 3))
     }
   }
