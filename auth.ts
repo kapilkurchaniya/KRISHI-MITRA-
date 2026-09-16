@@ -25,8 +25,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           where: { email: credentials.email as string }
         })
 
-        // In a real app, you would hash the password and compare it
-        // Here we just check if user exists (placeholder)
+        // Here we auto-create the user if they don't exist to allow any login for demo
+        if (!user) {
+          user = await prisma.user.create({
+            data: {
+              email: credentials.email as string,
+              name: "Demo User",
+            }
+          })
+        }
+
         if (user) {
           return user
         }
