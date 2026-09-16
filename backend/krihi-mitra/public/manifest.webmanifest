@@ -1,0 +1,56 @@
+{
+  "name": "AI Krishi - Smart Farming Assistant",
+  "short_name": "AI Krishi",
+  "description": "Plant disease scanner, hyperlocal weather, mandi prices and AI farming assistant for Indian farmers.",
+  "start_url": "/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f7faf3",
+  "theme_color": "#16a34a",
+  "categories": ["agriculture", "productivity", "lifestyle"],
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scan a plant",
+      "short_name": "Scanner",
+      "description": "Diagnose plant diseases with your camera",
+      "url": "/scanner",
+      "icons": [{ "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Mandi prices",
+      "short_name": "Mandi",
+      "description": "Live crop prices in your district",
+      "url": "/mandi",
+      "icons": [{ "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Krishi Mitra",
+      "short_name": "Mitra",
+      "description": "Ask the AI farming assistant",
+      "url": "/mitra",
+      "icons": [{ "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" }]
+    }
+  ]
+}
