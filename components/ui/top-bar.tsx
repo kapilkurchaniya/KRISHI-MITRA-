@@ -21,7 +21,7 @@ export function TopBar({ title, showBack = false, showLogo = false, rightSlot, c
   return (
     <header
       className={cn(
-        "sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 safe-area-top",
+        "sticky top-0 z-30 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 safe-area-top md:hidden",
         className,
       )}
     >

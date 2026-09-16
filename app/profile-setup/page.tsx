@@ -86,7 +86,7 @@ export default function ProfileSetupPage() {
 
   return (
     <main className="min-h-dvh bg-background">
-      <div className="mx-auto max-w-md px-4 py-8 flex flex-col gap-6">
+      <div className="mx-auto max-w-lg px-4 py-8 sm:py-12 flex flex-col gap-6">
         <div className="text-center">
           <div className="mx-auto mb-3 size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
             <Sprout className="size-7" aria-hidden="true" />
