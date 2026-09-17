@@ -33,34 +33,34 @@ export function DashboardContent({ profile, children }: DashboardContentProps) {
   ]
 
   return (
-    <div className="px-4 pt-4 flex flex-col gap-5">
-      <section className="flex flex-col gap-1">
+    <div className="flex flex-col gap-5 md:gap-8 lg:gap-10">
+      <section className="flex flex-col gap-1 md:gap-2">
         <p className="text-sm text-muted-foreground">{language === "hi" ? "नमस्ते," : "Namaste,"}</p>
-        <h1 className="font-serif text-2xl font-bold text-balance">{firstName}</h1>
-        <p className="text-xs text-muted-foreground inline-flex items-center gap-1.5">
-          <MapPin className="size-3.5" aria-hidden="true" />
+        <h1 className="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-balance">{firstName}</h1>
+        <p className="text-xs md:text-sm text-muted-foreground inline-flex items-center gap-1.5">
+          <MapPin className="size-3.5 md:size-4" aria-hidden="true" />
           {placeLabel}
         </p>
       </section>
 
-      <section aria-label="Quick actions" className="grid grid-cols-4 sm:flex gap-3">
+      <section aria-label="Quick actions" className="grid grid-cols-4 sm:flex gap-3 md:gap-6 lg:gap-8">
         {quickActions.map(({ href, label, icon: Icon, tone }) => (
           <Link
             key={href}
             href={href}
-            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md transition-shadow sm:w-28 lg:w-32"
+            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md transition-shadow sm:w-28 lg:w-36 lg:py-4"
           >
-            <span className={`size-10 rounded-xl ${tone} flex items-center justify-center`}>
-              <Icon className="size-5" aria-hidden="true" />
+            <span className={`size-10 lg:size-12 rounded-xl ${tone} flex items-center justify-center`}>
+              <Icon className="size-5 lg:size-6" aria-hidden="true" />
             </span>
-            <span className="text-[11px] font-medium text-foreground text-center px-1 leading-tight">
+            <span className="text-[11px] lg:text-sm font-medium text-foreground text-center px-1 leading-tight">
               {label}
             </span>
           </Link>
         ))}
       </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {children}
       </div>
       <Link

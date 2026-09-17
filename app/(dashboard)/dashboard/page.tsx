@@ -34,7 +34,7 @@ export default async function DashboardPage() {
       <div className="md:hidden">
         <TopBar showLogo />
       </div>
-      <div className="px-4 pt-4 pb-6">
+      <div className="flex flex-col gap-4">
         <DashboardContent profile={profile}>
           <DashboardWeather />
           <DashboardMandi />
