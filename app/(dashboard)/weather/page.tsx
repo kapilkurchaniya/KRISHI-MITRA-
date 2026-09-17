@@ -33,7 +33,7 @@ export default function WeatherPage() {
           </button>
         }
       />
-      <div className="px-4 pt-4 flex flex-col gap-4">
+      <div className="flex flex-col gap-4 lg:gap-8">
         <div className="text-xs text-muted-foreground inline-flex items-center gap-1.5">
           <MapPin className="size-3.5" aria-hidden="true" />
           {location
@@ -51,76 +51,86 @@ export default function WeatherPage() {
             Loading hyperlocal forecast...
           </div>
         ) : (
-          <>
-            <section className="rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <div className="text-xs uppercase tracking-wider opacity-80">Right now</div>
-                  <div className="font-serif text-5xl font-bold">{Math.round(data.current.temp)}&deg;C</div>
-                  <div className="text-sm capitalize mt-1 opacity-90">{data.current.conditions}</div>
-                </div>
-                <div className="size-16 rounded-2xl bg-primary-foreground/15 flex items-center justify-center">
-                  <CloudSun className="size-8" aria-hidden="true" />
-                </div>
-              </div>
-              <div className="mt-4 grid grid-cols-3 gap-2 text-sm">
-                <div className="rounded-xl bg-primary-foreground/10 p-3">
-                  <div className="flex items-center gap-1 opacity-80 text-xs">
-                    <Droplets className="size-3" aria-hidden="true" />
-                    Humidity
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+            <div className="flex flex-col gap-4 lg:gap-8">
+              <section className="rounded-3xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground p-6 lg:p-8">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <div className="text-xs lg:text-sm uppercase tracking-wider opacity-80">Right now</div>
+                    <div className="font-serif text-5xl lg:text-7xl font-bold">{Math.round(data.current.temp)}&deg;C</div>
+                    <div className="text-sm lg:text-base capitalize mt-1 opacity-90">{data.current.conditions}</div>
                   </div>
-                  <div className="font-semibold">{data.current.humidity}%</div>
-                </div>
-                <div className="rounded-xl bg-primary-foreground/10 p-3">
-                  <div className="flex items-center gap-1 opacity-80 text-xs">
-                    <Wind className="size-3" aria-hidden="true" />
-                    Wind
+                  <div className="size-16 lg:size-20 rounded-2xl bg-primary-foreground/15 flex items-center justify-center">
+                    <CloudSun className="size-8 lg:size-10" aria-hidden="true" />
                   </div>
-                  <div className="font-semibold">{Math.round(data.current.wind_speed)} km/h</div>
                 </div>
-                <div className="rounded-xl bg-primary-foreground/10 p-3">
-                  <div className="flex items-center gap-1 opacity-80 text-xs">
-                    <Sun className="size-3" aria-hidden="true" />
-                    Conditions
+                <div className="mt-4 lg:mt-8 grid grid-cols-3 gap-2 lg:gap-4 text-sm lg:text-base">
+                  <div className="rounded-xl bg-primary-foreground/10 p-3 lg:p-4">
+                    <div className="flex items-center gap-1 opacity-80 text-xs lg:text-sm">
+                      <Droplets className="size-3 lg:size-4" aria-hidden="true" />
+                      Humidity
+                    </div>
+                    <div className="font-semibold">{data.current.humidity}%</div>
                   </div>
-                  <div className="font-semibold capitalize">{data.current.conditions}</div>
+                  <div className="rounded-xl bg-primary-foreground/10 p-3 lg:p-4">
+                    <div className="flex items-center gap-1 opacity-80 text-xs lg:text-sm">
+                      <Wind className="size-3 lg:size-4" aria-hidden="true" />
+                      Wind
+                    </div>
+                    <div className="font-semibold">{Math.round(data.current.wind_speed)} km/h</div>
+                  </div>
+                  <div className="rounded-xl bg-primary-foreground/10 p-3 lg:p-4">
+                    <div className="flex items-center gap-1 opacity-80 text-xs lg:text-sm">
+                      <Sun className="size-3 lg:size-4" aria-hidden="true" />
+                      Conditions
+                    </div>
+                    <div className="font-semibold capitalize">{data.current.conditions}</div>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            <section>
-              <h2 className="font-serif text-lg font-bold mb-2">7-day forecast</h2>
+              <Link
+                href="/weather/history"
+                className="hidden lg:inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 font-medium text-foreground hover:bg-muted"
+              >
+                <History className="size-4" aria-hidden="true" />
+                View weather history
+              </Link>
+            </div>
+
+            <section className="flex flex-col gap-4">
+              <h2 className="font-serif text-lg lg:text-xl font-bold mb-2 lg:mb-0">7-day forecast</h2>
               <ul className="rounded-2xl border border-border bg-card divide-y divide-border overflow-hidden">
                 {data.daily.map((d) => (
-                  <li key={d.date} className="px-4 py-3 flex items-center gap-3">
-                    <div className="w-12 text-sm font-medium">
+                  <li key={d.date} className="px-4 py-3 lg:px-6 lg:py-4 flex items-center gap-3 lg:gap-4">
+                    <div className="w-12 lg:w-16 text-sm lg:text-base font-medium">
                       {new Date(d.date).toLocaleDateString(undefined, { weekday: "short" })}
                     </div>
-                    <span className="size-9 rounded-lg bg-muted flex items-center justify-center text-foreground">
+                    <span className="size-9 lg:size-10 rounded-lg bg-muted flex items-center justify-center text-foreground">
                       {d.pop > 0.3 ? (
-                        <CloudRain className="size-4" aria-hidden="true" />
+                        <CloudRain className="size-4 lg:size-5" aria-hidden="true" />
                       ) : (
-                        <Sun className="size-4" aria-hidden="true" />
+                        <Sun className="size-4 lg:size-5" aria-hidden="true" />
                       )}
                     </span>
-                    <div className="flex-1 text-sm capitalize text-muted-foreground truncate">{d.conditions}</div>
-                    <div className="text-xs text-muted-foreground w-10 text-right">
+                    <div className="flex-1 text-sm lg:text-base capitalize text-muted-foreground truncate">{d.conditions}</div>
+                    <div className="text-xs lg:text-sm text-muted-foreground w-10 lg:w-12 text-right">
                       {Math.round(d.temp_min)}&deg;
                     </div>
-                    <div className="text-sm font-semibold w-10 text-right">{Math.round(d.temp_max)}&deg;</div>
+                    <div className="text-sm lg:text-base font-semibold w-10 lg:w-12 text-right">{Math.round(d.temp_max)}&deg;</div>
                   </li>
                 ))}
               </ul>
+              
+              <Link
+                href="/weather/history"
+                className="lg:hidden inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 font-medium text-foreground hover:bg-muted"
+              >
+                <History className="size-4" aria-hidden="true" />
+                View weather history
+              </Link>
             </section>
-
-            <Link
-              href="/weather/history"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card py-3 font-medium text-foreground hover:bg-muted"
-            >
-              <History className="size-4" aria-hidden="true" />
-              View weather history
-            </Link>
-          </>
+          </div>
         )}
       </div>
     </>
