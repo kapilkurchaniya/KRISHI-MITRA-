@@ -48,7 +48,7 @@ export function DashboardContent({ profile, children }: DashboardContentProps) {
           <Link
             key={href}
             href={href}
-            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md transition-shadow sm:w-28 lg:w-36 lg:py-4"
+            className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card py-3 hover:shadow-md active:scale-95 transition-all duration-200 sm:w-28 lg:w-36 lg:py-4"
           >
             <span className={`size-10 lg:size-12 rounded-xl ${tone} flex items-center justify-center`}>
               <Icon className="size-5 lg:size-6" aria-hidden="true" />
@@ -65,7 +65,7 @@ export function DashboardContent({ profile, children }: DashboardContentProps) {
       </div>
       <Link
         href="/mitra"
-        className="rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-accent-foreground p-5 flex items-center gap-4 hover:shadow-md transition-shadow"
+        className="rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-accent-foreground p-5 flex items-center gap-4 hover:shadow-md active:scale-[0.98] transition-all duration-200"
       >
         <div className="size-12 rounded-xl bg-accent-foreground/15 flex items-center justify-center">
           <Sparkles className="size-6" aria-hidden="true" />
