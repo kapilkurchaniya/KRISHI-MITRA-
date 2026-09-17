@@ -55,15 +55,15 @@ export default function MandiPage() {
             No prices found for that search.
           </div>
         ) : (
-          <ul className="rounded-2xl border border-border bg-card divide-y divide-border overflow-hidden">
+          <ul className="rounded-2xl border border-border bg-card divide-y divide-border md:divide-y-0 md:bg-transparent md:border-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-4 overflow-hidden md:overflow-visible">
             {prices.map((p) => {
               const trend = p.change_pct ?? 0
               const up = trend >= 0
               return (
-                <li key={`${p.crop}-${p.market}`}>
+                <li key={`${p.crop}-${p.market}`} className="md:bg-card md:border md:border-border md:rounded-2xl md:overflow-hidden md:hover:shadow-md transition-shadow">
                   <Link
                     href={`/mandi/detail?crop=${encodeURIComponent(p.crop)}&market=${encodeURIComponent(p.market)}`}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50"
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-muted/50 h-full"
                   >
                     <div className="flex-1 min-w-0">
                       <div className="font-medium capitalize truncate">{p.crop}</div>
