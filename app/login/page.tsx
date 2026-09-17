@@ -111,8 +111,24 @@ export default function LoginPage() {
           <form 
             action={async (formData) => {
               "use server"
-              await signIn("credentials", formData)
-              redirect("/dashboard")
+              try {
+                const email = formData.get("email") as string
+                const password = formData.get("password") as string
+                await signIn("credentials", {
+                  email,
+                  password,
+                  redirectTo: "/dashboard",
+                })
+              } catch (error) {
+                if (error instanceof Error && error.name === "RedirectError") {
+                  throw error
+                }
+                if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+                  throw error
+                }
+                // If it's a NextAuth error, it will throw. We should let it throw redirect.
+                throw error
+              }
             }}
             className="space-y-5"
           >
