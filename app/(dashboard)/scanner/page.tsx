@@ -47,7 +47,7 @@ export default async function ScannerPage() {
             <div className="grid grid-cols-2 gap-3 lg:gap-5">
               <Link
                 href="/scanner/capture"
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card aspect-square hover:shadow-md transition-shadow"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card aspect-square hover:shadow-md active:scale-95 transition-all duration-200"
               >
                 <span className="size-12 lg:size-14 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                   <Camera className="size-6 lg:size-7" aria-hidden="true" />
@@ -57,7 +57,7 @@ export default async function ScannerPage() {
               </Link>
               <Link
                 href="/scanner/capture?source=upload"
-                className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card aspect-square hover:shadow-md transition-shadow"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-card aspect-square hover:shadow-md active:scale-95 transition-all duration-200"
               >
                 <span className="size-12 lg:size-14 rounded-xl bg-accent/15 text-accent flex items-center justify-center">
                   <Upload className="size-6 lg:size-7" aria-hidden="true" />

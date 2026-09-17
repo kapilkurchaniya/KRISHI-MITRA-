@@ -31,12 +31,34 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url)
 
-  // Never cache Supabase, auth, or API calls
+  // Never cache Supabase or Auth
   if (
-    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/api/auth/") ||
     url.pathname.startsWith("/auth/") ||
     url.host.includes("supabase.co")
   ) {
+    return
+  }
+
+  // Network-first for API requests (Weather, Mandi, Profile)
+  if (url.pathname.startsWith("/api/")) {
+    event.respondWith(
+      fetch(request)
+        .then((res) => {
+          const copy = res.clone()
+          caches.open(RUNTIME_CACHE).then((c) => c.put(request, copy))
+          return res
+        })
+        .catch(() => {
+          return caches.match(request).then((cached) => {
+            if (cached) return cached
+            // Return empty JSON fallback for API endpoints if no cache
+            return new Response(JSON.stringify({ error: "offline", offline: true }), {
+              headers: { "Content-Type": "application/json" }
+            })
+          })
+        })
+    )
     return
   }
 
