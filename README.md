@@ -1,4 +1,4 @@
-  # KRISHI MITRA
+   # KRISHI MITRA
 
 A production-ready agricultural assistant built with Next.js, React, Supabase, and AI-powered crop and chat features.
 
